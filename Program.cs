@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using restCore.Common;
 
 namespace restCore
 {
@@ -18,7 +13,13 @@ namespace restCore
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        WebHost.CreateDefaultBuilder(args)
+        .ConfigureAppConfiguration((builderContext, config) =>
+        {
+            IHostingEnvironment env = builderContext.HostingEnvironment;
+            new Config(env);
+        })
+        .UseKestrel()
+        .UseStartup<Startup>();
     }
 }

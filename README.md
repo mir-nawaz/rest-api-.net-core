@@ -19,7 +19,7 @@ dotnet build
 
 ## Run 
 ```
-dotnet run
+ dotnet run --environment "Production"
 ```
 
 ## API List
@@ -33,4 +33,3 @@ DELETE  /api/commands/{id}
 
 ## Application Architecture
 ![Application Architecture](/application_architecture.jpg)
-
