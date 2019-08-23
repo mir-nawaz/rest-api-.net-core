@@ -7,6 +7,7 @@ namespace restCore.Models
         public DB(DbContextOptions<DB> options) : base(options)
         {}
 
+        public DbSet<User> User {get; set;}
         public DbSet<Command> Command {get; set;}
     }
 }

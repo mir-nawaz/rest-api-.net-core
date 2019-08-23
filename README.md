@@ -12,6 +12,11 @@ dotnet restore
 dotnet ef database update
 ```
 
+## Add Migrations 
+```
+dotnet ef migrations add <name>
+```
+
 ## Build 
 ```
 dotnet build

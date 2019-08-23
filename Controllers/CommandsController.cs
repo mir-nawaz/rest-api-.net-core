@@ -18,7 +18,7 @@ namespace restCore.Controllers
 
         //GET:      api/commands
         [HttpGet]
-        public ActionResult<IEnumerable<Command>> GetCommandItems()
+        public ActionResult<IEnumerable<Command>> Get()
         {
             return dbContext.Command;
         }
@@ -26,7 +26,7 @@ namespace restCore.Controllers
         //GET:      api/commands/n
         [HttpGet("{id}")]
         
-        public ActionResult<Command> GetCommandItem(int id)
+        public ActionResult<Command> List(int id)
         {
             var commandItem = dbContext.Command.Find(id);
 
@@ -40,17 +40,17 @@ namespace restCore.Controllers
         
         //POST:     api/commands
         [HttpPost]
-        public ActionResult<Command> PostCommandItem(Command command)
+        public ActionResult<Command> Create(Command command)
         {
             dbContext.Command.Add(command);
             dbContext.SaveChanges();
 
-            return CreatedAtAction("GetCommandItem", new Command{Id = command.Id}, command);
+            return CreatedAtAction("Get", new Command{Id = command.Id}, command);
         }
 
         //PUT:      api/commands/n
         [HttpPut("{id}")]
-        public ActionResult PutCommandItem(int id, Command command)
+        public ActionResult Update(int id, Command command)
         {
             if (id != command.Id)
             {
@@ -65,7 +65,7 @@ namespace restCore.Controllers
 
         //DELETE:   api/commands/n
         [HttpDelete("{id}")]
-        public ActionResult<Command> DeleteCommandItem(int id)
+        public ActionResult<Command> Delete(int id)
         {
             var commandItem = dbContext.Command.Find(id);
 
