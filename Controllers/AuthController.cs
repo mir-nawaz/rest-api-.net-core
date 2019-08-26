@@ -43,15 +43,30 @@ namespace restCore.Controllers
         //POST:      api/auth/login
         [HttpPost("login")]
 
-        public ActionResult Login()
+        public ActionResult Login([FromBody] LoginViewModel model)
         {
-            var user = dbContext.User.Find(1);
+            User userEmail = dbContext.User.FirstOrDefault(x => x.Email == model.Email);
 
-            if (user == null)
+            if (userEmail == null)
             {
-                return NotFound();
+                return BadRequest(new { token = "token", expiration = "time" });
             }
 
+            User userPwd = dbContext.User.FirstOrDefault(x => x.Password == model.Password);
+
+            if (userPwd == null)
+            {
+                return BadRequest();
+            }
+
+            JwtToken jwtToken = new JwtToken
+            {
+                Issuer = "adasdasd",
+                Expires = 12,
+                Token = "Asasd",
+                User = userPwd
+            };
+            
             return Ok(new { token = "token", expiration = "time" });
         }
     }
