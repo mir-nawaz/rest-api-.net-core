@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using restCore.Models;
-using Microsoft.EntityFrameworkCore;
+using restCore.Repository;
 
 namespace restCore.Controllers
 {
@@ -9,43 +9,38 @@ namespace restCore.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly DB dbContext;
-
+        private IUsersRepository userRepository;
         public UsersController(DB context)
         {
-            dbContext = context;
+            userRepository = new UsersRepository(context);
         }
 
         //GET:      api/users
         [HttpGet]
         public ActionResult<IEnumerable<User>> List()
         {
-            return dbContext.User;
+            IEnumerable<User> users = userRepository.GetAll();
+            return Ok(users);
         }
         
         //GET:      api/users/n
         [HttpGet("{id}")]
-        
         public ActionResult<User> Get(int id)
         {
-            var user = dbContext.User.Find(id);
-
+            User user = userRepository.GetById(id);
             if (user == null)
             {
                 return NotFound();
             }
-
-            return user;
+            return Ok(user);
         }
 
         //POST:     api/users
         [HttpPost]
         public ActionResult<User> Create(User user)
         {
-            dbContext.User.Add(user);
-            dbContext.SaveChanges();
-
-            return CreatedAtAction("Get", new User{Id = user.Id}, user);
+            User newUser = userRepository.Insert(user);
+            return Ok(newUser);
         }
 
         //PUT:      api/users/n
@@ -57,8 +52,7 @@ namespace restCore.Controllers
                 return BadRequest();
             }
 
-            dbContext.Entry(user).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            userRepository.Update(user);
 
             return NoContent();
         }
@@ -67,16 +61,12 @@ namespace restCore.Controllers
         [HttpDelete("{id}")]
         public ActionResult<User> Delete(int id)
         {
-            var user = dbContext.User.Find(id);
-
+            User user = userRepository.GetById(id);
             if (user == null)
             {
                 return NotFound();
             }
-
-            dbContext.User.Remove(user);
-            dbContext.SaveChanges();
-
+            userRepository.Delete(user);
             return user;
         }
     }
